@@ -1,0 +1,25 @@
+.globl _boot
+.section .text
+
+_boot:
+    lui x5, 0x80000        # t0 = endereço dos LEDs
+    addi x6, x0, 0x0F      # t1 = 00001111
+    addi x7, x0, 0xF0      # t2 = 11110000
+
+loop:
+    sw x6, 0(x5)           # Acende 00001111
+    call delay
+
+    sw x7, 0(x5)           # Acende 11110000
+    call delay
+
+    j loop
+
+delay:
+    lui x10, 872           # a0 = 872 << 12
+    addi x11, x0, 0        # t3 = contador = 0
+
+delay_loop:
+    addi x11, x11, 1
+    bne x11, x10, delay_loop
+    ret
